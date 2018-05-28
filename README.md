@@ -1,4 +1,4 @@
-# mruby-sftp-glob <br> [![Build Status](https://travis-ci.org/appPlant/mruby-sftp-glob.svg?branch=master)](https://travis-ci.org/appPlant/mruby-sftp-glob) [![Build status](https://ci.appveyor.com/api/projects/status/28xa5098sup264pr/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/mruby-sftp-glob/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/44ad8610484d53c6d580/maintainability)](https://codeclimate.com/github/appPlant/mruby-sftp-glob/maintainability)
+# mruby-sftp-glob [![Build Status](https://travis-ci.org/appPlant/mruby-sftp-glob.svg?branch=master)](https://travis-ci.org/appPlant/mruby-sftp-glob) [![Build status](https://ci.appveyor.com/api/projects/status/28xa5098sup264pr/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/mruby-sftp-glob/branch/master)
 
 Extension for [mruby-sftp][mruby-sftp] to match (possibly recursively) all directory entries under path against pattern.
 
