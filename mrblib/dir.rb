@@ -34,7 +34,7 @@ module SFTP
     # @return [ Array<SFTP::Entry> ] nil if block is given.
     def glob(pattern, path = '', flags = 0, &block)
       path, flags = '', path if path.is_a? Integer
-      # flags      |= ::File::FNM_PATHNAME
+      flags      |= ::File::FNM_PATHNAME
       queue       = entries(path).reject { |e| e.name == '.' || e.name == '..' }
       results     = [] unless block
 
