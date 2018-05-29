@@ -26,5 +26,5 @@ MRuby::Gem::Specification.new('mruby-sftp-glob') do |spec|
   spec.summary = 'SFTP::Dir#glob'
 
   spec.add_dependency 'mruby-sftp',         mgem: 'mruby-sftp'
-  spec.add_dependency 'mruby-file-fnmatch', github: 'appplant/mruby-file-fnmatch'
+  spec.add_dependency 'mruby-file-fnmatch', mgem: 'mruby-file-fnmatch'
 end
