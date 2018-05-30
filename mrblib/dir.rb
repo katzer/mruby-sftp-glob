@@ -27,16 +27,15 @@ module SFTP
     # are found; otherwise, they will be returned in an array when the method
     # finishes.
     #
-    # @param [ String ] pattern The pattern to use for.
     # @param [ String ] path    The path to test.
+    # @param [ String ] pattern The pattern to use for.
     # @param [ Int ]    flags   A bitwise OR of the File::FNM_XXX constants.
     #
     # @return [ Array<SFTP::Entry> ] nil if block is given.
-    def glob(pattern, path = '', flags = 0, &block)
-      path, flags = '', path if path.is_a? Integer
-      flags      |= ::File::FNM_PATHNAME
-      queue       = entries(path).reject { |e| e.name == '.' || e.name == '..' }
-      results     = [] unless block
+    def glob(path, pattern, flags = 0, &block)
+      flags  |= ::File::FNM_PATHNAME
+      queue   = entries(path).reject { |e| e.name == '.' || e.name == '..' }
+      results = [] unless block
 
       while (entry = queue.shift)
         if ::File.fnmatch?(pattern, entry.name, flags)
@@ -55,12 +54,12 @@ module SFTP
 
     # Identical to calling glob with a flags parameter of 0 and no block.
     #
-    # @param [ String ] pattern The pattern to use for.
     # @param [ String ] path    The path to test.
+    # @param [ String ] pattern The pattern to use for.
     #
     # @return [ Array<SFTP::Entry> ] The matched entries as an array.
-    def [](pattern, path = '')
-      glob(pattern, path, 0).to_a
+    def [](path, pattern)
+      glob(path, pattern, 0).to_a
     end
   end
 end

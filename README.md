@@ -4,7 +4,7 @@ Extension for [mruby-sftp][mruby-sftp] to match (possibly recursively) all direc
 
 ```ruby
 SFTP.start('test.rebex.net', 'demo', password: 'password') do |sftp|
-  sftp.dir.glob('**/*.rb') do |entry|
+  sftp.dir.glob('lib', '*.rb') do |entry|
     puts entry.name
   end
 end
