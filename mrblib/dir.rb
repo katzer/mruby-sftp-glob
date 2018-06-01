@@ -49,7 +49,7 @@ module SFTP
                  .each   { |e| e.name.replace("#{entry.name}/#{e.name}") }
       end
 
-      results
+      results.each { |e| e.name.replace "#{path}/#{e.name}" unless path.empty? }
     end
 
     # Identical to calling glob with a flags parameter of 0 and no block.
