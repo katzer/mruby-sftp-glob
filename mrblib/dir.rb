@@ -36,8 +36,6 @@ module SFTP
       flags    |= ::File::FNM_PATHNAME
       queue     = entries(path).reject { |e| e.name == '.' || e.name == '..' }
       dirname   = pattern[0...(pattern.rindex('/') || 0)]
-      recursive = dirname.include? '*'
-      level     = dirname.include?('**') ? 1000 : dirname.split('/').size
       results   = [] unless block
 
       while (entry = queue.shift)
@@ -47,7 +45,7 @@ module SFTP
           block ? yield(entry) : results << entry
         end
 
-        next unless recursive && entry.directory? && level >= rpath.split('/').size
+        next unless entry.directory? && ::File.fnmatch?(dirname, rpath, flags)
 
         queue += entries(rpath)
                  .reject { |e| e.name == '.' || e.name == '..' }
