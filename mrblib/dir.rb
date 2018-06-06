@@ -54,7 +54,7 @@ module SFTP
                  .each   { |f| f.name.replace("#{e.name}/#{f.name}") }
       end
 
-      results.each { |f| f.name.replace "#{path}#{f.name}" } unless path.empty?
+      results.each { |f| f.name.replace "#{rpath}/#{f.name}" } unless path.empty?
 
       results
     end
