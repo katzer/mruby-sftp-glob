@@ -33,18 +33,23 @@ module SFTP
     #
     # @return [ Array<SFTP::Entry> ] nil if block is given.
     def glob(path, pattern, flags = 0, &block)
-      flags  |= ::File::FNM_PATHNAME
-      queue   = entries(path).reject { |e| e.name == '.' || e.name == '..' }
-      results = [] unless block
+      flags    |= ::File::FNM_PATHNAME
+      queue     = entries(path).reject { |e| e.name == '.' || e.name == '..' }
+      dirname   = pattern[0...(pattern.rindex('/') || 0)]
+      recursive = dirname.include? '*'
+      level     = dirname.include?('**') ? 1000 : dirname.split('/').size
+      results   = [] unless block
 
       while (entry = queue.shift)
+        rpath = "#{path}#{'/' unless path.empty?}#{entry.name}"
+
         if ::File.fnmatch?(pattern, entry.name, flags)
           block ? yield(entry) : results << entry
         end
 
-        next unless entry.directory?
+        next unless recursive && entry.directory? && level >= rpath.split('/').size
 
-        queue += entries("#{path}#{'/' unless path.empty?}#{entry.name}")
+        queue += entries(rpath)
                  .reject { |e| e.name == '.' || e.name == '..' }
                  .each   { |e| e.name.replace("#{entry.name}/#{e.name}") }
       end
