@@ -20,9 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+class Symbol
+  def to_proc
+    ->(obj, *args, &block) { obj.__send__(self, *args, &block) }
+  end
+end
+
 SFTP.start('test.rebex.net', 'demo', password: 'password') do |sftp|
   assert 'SFTP::Dir#[]' do
-    entries = sftp.dir['/', '**/example/*.png']
+    entries = sftp.dir['/**/example/*.png']
 
     assert_kind_of Array, entries
     assert_true entries.any?
@@ -31,10 +37,13 @@ SFTP.start('test.rebex.net', 'demo', password: 'password') do |sftp|
     entries.each { |e| assert_equal '.png', e.name[-4..-1] }
 
     assert_equal '/', entries.first.name[0] if entries.any?
+
+    assert_equal sftp.dir['pub/**/*.png'].map(&:name), \
+                 sftp.dir['pub/example/*.png'].map(&:name)
   end
 
   assert 'SFTP::Dir#glob' do
-    entries = sftp.dir.glob('', '**/*{client,editor}.png', ::File::FNM_EXTGLOB)
+    entries = sftp.dir.glob('**/*{client,editor}.png', ::File::FNM_EXTGLOB)
 
     assert_kind_of Array, entries
     assert_true entries.any?

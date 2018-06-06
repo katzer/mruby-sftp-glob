@@ -1,10 +1,10 @@
 # mruby-sftp-glob [![Build Status](https://travis-ci.org/appPlant/mruby-sftp-glob.svg?branch=master)](https://travis-ci.org/appPlant/mruby-sftp-glob) [![Build status](https://ci.appveyor.com/api/projects/status/28xa5098sup264pr/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/mruby-sftp-glob/branch/master)
 
-Extension for [mruby-sftp][mruby-sftp] to match (possibly recursively) all directory entries under path against pattern.
+Extension for [mruby-sftp][mruby-sftp] to match (possibly recursively) all directory entries against pattern.
 
 ```ruby
 SFTP.start('test.rebex.net', 'demo', password: 'password') do |sftp|
-  sftp.dir.glob('lib', '*.rb') do |entry|
+  sftp.dir.glob('lib/*.rb') do |entry|
     puts entry.name
   end
 end
