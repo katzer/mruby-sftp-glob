@@ -23,36 +23,40 @@
 module SFTP
   class Dir
     # Match (possibly recursively) all directory entries under path against
-    # pattern. If a block is given, matches will be yielded to the block as they
-    # are found; otherwise, they will be returned in an array when the method
-    # finishes.
+    # pattern.
     #
     # @param [ String ] path    The path to test.
     # @param [ String ] pattern The pattern to use for.
     # @param [ Int ]    flags   A bitwise OR of the File::FNM_XXX constants.
     #
-    # @return [ Array<SFTP::Entry> ] nil if block is given.
-    def glob(path, pattern, flags = 0, &block)
-      flags    |= ::File::FNM_PATHNAME
-      queue     = entries(path).reject { |e| e.name == '.' || e.name == '..' }
-      dirname   = pattern[0...(pattern.rindex('/') || 0)]
-      results   = [] unless block
+    # @return [ Array<SFTP::Entry> ]
+    def glob(path, pattern, flags = 0)
+      flags  |= ::File::FNM_PATHNAME
+      queue   = entries(path).reject { |e| e.name == '.' || e.name == '..' }
+      dirname = pattern[0...(pattern.rindex('/') || 0)]
+      rpath   = path[-1] == '/' ? path[0...-1] : path.dup
+      parts   = dirname.split('/')
+      results = []
 
-      while (entry = queue.shift)
-        rpath = "#{path}#{'/' unless path.empty?}#{entry.name}"
+      while (e = queue.shift)
+        results << e if ::File.fnmatch?(pattern, e.name, flags)
 
-        if ::File.fnmatch?(pattern, entry.name, flags)
-          block ? yield(entry) : results << entry
-        end
+        next unless e.directory?
 
-        next unless entry.directory? && ::File.fnmatch?(dirname, rpath, flags)
+        epath  = rpath.empty? ? e.name : "#{rpath}/#{e.name}"
+        spatt  = parts[0, epath.split('/').size].join('/')
 
-        queue += entries(rpath)
-                 .reject { |e| e.name == '.' || e.name == '..' }
-                 .each   { |e| e.name.replace("#{entry.name}/#{e.name}") }
+        next unless ::File.fnmatch(spatt, epath, flags) || \
+                    ::File.fnmatch("#{spatt}/*", epath, flags)
+
+        queue += entries(epath)
+                 .reject { |f| f.name == '.' || f.name == '..' }
+                 .each   { |f| f.name.replace("#{e.name}/#{f.name}") }
       end
 
-      results.each { |e| e.name.replace "#{path}/#{e.name}" unless path.empty? }
+      results.each { |f| f.name.replace "#{path}#{f.name}" } unless path.empty?
+
+      results
     end
 
     # Identical to calling glob with a flags parameter of 0 and no block.

@@ -22,22 +22,26 @@
 
 SFTP.start('test.rebex.net', 'demo', password: 'password') do |sftp|
   assert 'SFTP::Dir#[]' do
-    entries = sftp.dir['/', '**/*.png']
+    entries = sftp.dir['/', '**/example/*.png']
 
     assert_kind_of Array, entries
     assert_true entries.any?
 
     entries.each { |e| assert_kind_of SFTP::Entry, e }
     entries.each { |e| assert_equal '.png', e.name[-4..-1] }
+
+    assert_equal '/', entries.first.name[0] if entries.any?
   end
 
   assert 'SFTP::Dir#glob' do
-    entries = sftp.dir.glob('/', '**/*{client,editor}.png', ::File::FNM_EXTGLOB)
+    entries = sftp.dir.glob('', '**/*{client,editor}.png', ::File::FNM_EXTGLOB)
 
     assert_kind_of Array, entries
     assert_true entries.any?
 
     entries.each { |e| assert_kind_of SFTP::Entry, e }
     entries.each { |e| assert_equal '.png', e.name[-4..-1] }
+
+    assert_true entries.first.name[0] != '/' if entries.any?
   end
 end
