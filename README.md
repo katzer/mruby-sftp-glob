@@ -1,4 +1,4 @@
-# mruby-sftp-glob [![Build Status](https://travis-ci.org/appPlant/mruby-sftp-glob.svg?branch=master)](https://travis-ci.org/appPlant/mruby-sftp-glob) [![Build status](https://ci.appveyor.com/api/projects/status/28xa5098sup264pr/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/mruby-sftp-glob/branch/master)
+# mruby-sftp-glob [![Build Status](https://travis-ci.com/appPlant/mruby-sftp-glob.svg?branch=master)](https://travis-ci.com/appPlant/mruby-sftp-glob) [![Build status](https://ci.appveyor.com/api/projects/status/28xa5098sup264pr/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/mruby-sftp-glob/branch/master)
 
 Extension for [mruby-sftp][mruby-sftp] to match (possibly recursively) all directory entries against pattern.
 
@@ -62,7 +62,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/apppla
 
 The mgem is available as open source under the terms of the [MIT License][license].
 
-Made with :yum: from Leipzig
+Made with :yum: in Leipzig
 
 © 2018 [appPlant GmbH][appplant]
 
